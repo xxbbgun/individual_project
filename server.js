@@ -1,71 +1,77 @@
 var http = require('http');
 var url = require('url');
+var fs = require('fs')
+const { loadData, saveData, book,remove,check } = require('./hotel');
 
-const { loadData, timeline, feed, create_tweet, follow } = require('./hotel');
-loadData();
+loadStock();
 
 http.createServer(function (req, res) {
 
     var request_path = url.parse(req.url, true);
     var message = '';
-    var data;
     var status = 200;
-
+    var data ='';
     switch (request_path.pathname) {
-        case '/timeline':
+        case '/fill':
+            fill(request_path.query.item, parseInt(request_path.query.quantity));
+            message += `${request_path.query.quantity} with ${request_path.query.item} filled!`;
+            break;
+
+        case '/sell':
             try {
-                data = timeline(request_path.query.user_id);
+                sell(request_path.query.item, parseInt(request_path.query.quantity));
+                message += request_path.query.quantity + ' ' + request_path.query.item + ' sold!';
             } catch (err) {
                 message += err;
                 console.log(err);
             }
             break;
 
-        case '/feed':
+        case '/check':
             try {
-                data = feed(request_path.query.user_id); // if NULL, return tweet of all users
+                let qtt = check(request_path.query.item);
+                message += 'We have ' + qtt + ' ' + request_path.query.item + ' check!';
             } catch (err) {
                 message += err;
                 console.log(err);
             }
             break;
 
-        case '/create_tweet':
-            if (reg.method == 'POST') {
-                let req_input = [];
-                reg.on('data', (chunk) => {
-                    req_input.push(chunk);
-                }).on('end', () => {
-                    try {
-                        data = create_tweet(request_path.query.user_id, request_path.query.source_id, request_path.query.message);
-                    } catch (err) {
-                        message += err;
-                        console.log(err);
-                    }
-                })
-            } else {
-                throw 'method not match'
-            } break;
-
-        case '/follow':
+        case '/clear':
             try {
-                data = follow(request_path.query.user_id, request_path.query.follow_user_id);
+                clear(request_path.query.item);
+                message += request_path.query.item + ' clear!';
             } catch (err) {
                 message += err;
                 console.log(err);
             }
+            break;
+
+        case '/remove':
+            try {
+                clear(request_path.query.item);
+                message += request_path.query.item + ' remove!';
+            } catch (err) {
+                status = 400
+                message += err;
+                console.log(err);
+            }
+            break;
+        default:
+            status = 404;
+            message = 'path not found!'
             break;
     }
-
     let response_object = {
-        statusCode: status,
+        status: status,
         message: message,
-        data: data
-    };
+        data:data
+    }
 
-    res.writeHead(200, { 'Content-Type': 'application/json' });
+
+    res.writeHead(status, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(response_object));
 
 }).listen(8080);
-console.log('Twt application is running on port 8080.');
+console.log('Hotel system is running on port 8080.');
 
