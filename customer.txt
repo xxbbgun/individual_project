@@ -1,5 +1,0 @@
-1-john-London,United Kingdom-09566478951
-2-mary-Canberra,Australia-0975653138
-3 sherlock-Paris,France-0654771237
-4 hudson-Bern,Switzerland-0894516325
-5 greg-Warsaw,Poland-0758945625

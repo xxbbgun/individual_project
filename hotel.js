@@ -1,41 +1,139 @@
-var fs = require('fs');
+var fs = require('fs')
+const {rooms,Room} = require("./room")
+const {customers,Customer} = require("./customer");
+const{books,Book}=require("./book");
 
-const Room = function (room_id, room_number, room_type,room_price, room_status) {
-    this.room_id = room_id;
-    this.room_number = room_number;
-    this.room_type = room_type;
-    this.room_price = room_price;
-    this.room_status = room_status;
-}
-
-
-var rooms = new Array();
-rooms.push(new Room(1, "001", "deluxe",5000, "occupied clean"));
-rooms.push(new Room(2, "010", "standard",2500, "occupied dirty"));
-rooms.push(new Room(3, "008", "standard", 2500,"occupied clean"));
-rooms.push(new Room(4, "015", "standard", 2500,"occupied clean"))
-rooms.push(new Room(5, "012", "standard", 2500,"occupied dirty"));
-
-
-
+//เพิ่มห้อง
 addRoom = (room_id,number,type ,price, status) => {
     let check = false;
     rooms.forEach((room) => {
         if (room.room_number == number) {
-            console.log("sorry1");
+            console.log("sorry we already have this room");
             check = true;
         }
     })
     if (check == false) {
-        rooms.push({ room_id:room_id, room_number: number,room_type:type,room_price:price, room_status: status })
+        rooms.push(new Room(room_id,number,type ,price, status))
         return rooms;
+    }
+    console.table(rooms);
+}
+
+//ลบห้อง
+deleteRoom = (id) => {
+    let check = false;
+    let index;
+    rooms.forEach((room) => {
+        if(room.room_id == id) {
+            check = true;
+        }
+    })
+    index = rooms.findIndex(rooms => rooms.room_id == id)
+    if(check == true) {
+        rooms.splice(index , 1)
+        return rooms;
+    } else if(check == false) {
+        console.log("Don't have room in hotel");
+    }
+}
+
+//เพิ่มcustomer
+createCustomer = (customer_id, customer_name, address, phone) => {
+    let check = false;
+    customers.forEach((customer) => {
+        if (customer.customer_id == customer_id) {
+            console.log("มีcustomerนี้แล้ว");
+            check = true;
+        }
+    })
+    if (check == false) {
+        customers.push(new Customer(customer_id, customer_name, address, phone))
+        return customers;
+    } else if (check == true) {
+        console.log("sorry");
+    }
+}
+
+//ลบcustomer
+deleteCustomer = (id) => {
+    let check = false;
+    let index;
+    customers.forEach((customer) => {
+        if(customer.customer_id == id) {
+            check = true;
+            console.log("Delete sucess");
+        }
+    })
+    index = customers.findIndex(customers => customers.customer_id == id)
+    if(check == true) {
+        customers.splice(index , 1)
+        return customers;
+    } else if(check == false) {
+        console.log("Don't have customer");
+    }
+}
+
+
+
+//จองห้อง
+bookRoom = (book_id, customer_id,room_id,date) => {
+    let check = false;
+    books.forEach((book) => {
+        if (book.book_id == book_id || book.room_id == room_id && book.date == date) {
+            console.log("จองแล้ว");
+            check = true;
+        }
+    })
+    if (check == false) {
+        books.push(new Book(book_id, customer_id,room_id,date))
+        return books;
     } else if (check == true) {
         console.log("sorry"); 
     }
 }
-delete
 
-addRoom( 9,"009", "deluxe", 5000,"occupied clean");
+//ยกเลิกการจอง
+deleteBook = (id) => {
+    let check = false;
+    let index;
+    books.forEach((book) => {
+        if (book.book_id == id) {
+            check = true;
+        }
+    })
+    index = books.findIndex(books => books.book_id == id)
+    if (check == true) {
+        books.splice(index, 1)
+        return books;
+    } else if (check == false) {
+        console.log("Don't have room in hotel");
+    }
+}
 
+//เช็คห้อง
+checkBook = (id)=>{
+    let check = false;
+    books.forEach((book)=>{
+        if(book.book_id==id){
+            console.log("Booking success");
+            check = true;
+        }
+    })
+    if(check == false){
+        console.log("NO booking");
+    }
+}
 
-console.table(rooms);
+// console.table(books);
+// console.table(rooms);
+// console.table(customers);
+
+module.exports={
+    addRoom:addRoom,
+    deleteRoom:deleteRoom,
+    createCustomer:createCustomer,
+    deleteCustomer:deleteCustomer,
+    bookRoom,bookRoom,
+    deleteBook:deleteBook
+
+}
