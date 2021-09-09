@@ -4,8 +4,8 @@ const { customers, Customer } = require("./customer");
 const { books, Book } = require("./book");
 
 const reg_text = /[a-zA-Z]$/;
-const reg_number = /\w$/;
-const reg_price = /^\d{1,5}$/;
+const reg_number = /^[0]\d/;
+const reg_price = /^[1-9]{3}\d/;
 const reg_id = /\d/;
 const reg_phone = /^[0][6789]\d{8}$/;
 const reg_date = /\d{4}-\d{2}-\d{2}/;
@@ -112,7 +112,6 @@ bookRoom = (book_id, customer_id, room_id, date) => {
             return books;
         } else if (check == true) {
             console.log("Sorry this room is already booking");
-            console.table(books);
         }
     } else {
         console.log("Sorry booking fail");
