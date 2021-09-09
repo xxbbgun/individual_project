@@ -4,11 +4,11 @@ const { customers, Customer } = require("./customer");
 const { books, Book } = require("./book");
 
 const reg_text = /[a-zA-Z]$/;
-const reg_tel = /^[0][6789]\d{8}$/;
 const reg_number = /\w$/;
 const reg_price = /^\d{1,5}$/;
 const reg_id = /\d/;
-const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
+const reg_phone = /^[0][6789]\d{8}$/;
+const reg_date = /\d{4}-\d{2}-\d{2}/;
 
 
 
@@ -16,7 +16,7 @@ const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
 addRoom = (room_id, number, type, price, status) => {
     let check = false;
 
-    if (reg_id.test(room_id)&&reg_number.test(number)&&reg_text.test(type)&&reg_price.test(price)&&reg_text.test(status)) {
+    if (reg_id.test(room_id) && reg_number.test(number) && reg_text.test(type) && reg_price.test(price) && reg_text.test(status)) {
         rooms.forEach((room) => {
             if (room.room_number == number) {
                 console.log("sorry we already have this room");
@@ -28,11 +28,9 @@ addRoom = (room_id, number, type, price, status) => {
             console.log("Create Room already!");
             console.table(rooms);
             return rooms;
-        } else if(check == true) {
-            console.log("Failed to create a room. This room has already been created.");
         }
-    }else{
-        console.log("error");
+    } else {
+        console.log("Failed to create a room");
     }
 }
 
@@ -58,19 +56,21 @@ deleteRoom = (id) => {
 //เพิ่มcustomer
 createCustomer = (customer_id, customer_name, address, phone) => {
     let check = false;
-    customers.forEach((customer) => {
-        if (customer.customer_id == customer_id) {
-            console.log("This customer is already in the system.");
-            check = true;
+    if (reg_id.test(customer_id) && reg_text.test(customer_name) && reg_text.test(address) && reg_phone.test(phone)) {
+        customers.forEach((customer) => {
+            if (customer.customer_id == customer_id) {
+                console.log("This customer is already in the system.");
+                check = true;
+            }
+        })
+        if (check == false) {
+            customers.push(new Customer(customer_id, customer_name, address, phone))
+            console.log("Create customer account success!");
+            console.table(customers);
+            return customers;
         }
-    })
-    if (check == false) {
-        customers.push(new Customer(customer_id, customer_name, address, phone))
-        console.log("Create customer success!");
-        console.table(customers);
-        return customers;
-    } else if (check == true) {
-        console.log("sorry");
+    } else {
+        console.log("Failed to create customer account.");
     }
 }
 
@@ -99,18 +99,23 @@ deleteCustomer = (id) => {
 //จองห้อง
 bookRoom = (book_id, customer_id, room_id, date) => {
     let check = false;
-    books.forEach((book) => {
-        if (book.book_id == book_id || book.room_id == room_id && book.date == date) {
-            check = true;
+    if (reg_id.test(book_id) && reg_id.test(customer_id) && reg_id.test(room_id) && reg_date.test(date)) {
+        books.forEach((book) => {
+            if (book.book_id == book_id || book.room_id == room_id && book.date == date) {
+                check = true;
+            }
+        })
+        if (check == false) {
+            books.push(new Book(book_id, customer_id, room_id, date))
+            console.log("Booking success!");
+            console.table(books);
+            return books;
+        } else if (check == true) {
+            console.log("Sorry this room is already booking");
+            console.table(books);
         }
-    })
-    if (check == false) {
-        books.push(new Book(book_id, customer_id, room_id, date))
-        console.log("Booking success!");
-        console.table(books);
-        return books;
-    } else if (check == true) {
-        console.log("Sorry this room is already booking");
+    } else {
+        console.log("Sorry booking fail");
     }
 }
 
@@ -118,34 +123,42 @@ bookRoom = (book_id, customer_id, room_id, date) => {
 deleteBook = (id) => {
     let check = false;
     let index;
-    books.forEach((book) => {
-        if (book.book_id == id) {
-            check = true;
+    if (reg_id.test(id)) {
+        books.forEach((book) => {
+            if (book.book_id == id) {
+                check = true;
+            }
+        })
+        index = books.findIndex(books => books.book_id == id)
+        if (check == true) {
+            books.splice(index, 1)
+            console.log("Cancel booking success!");
+            console.table(books);
+            return books;
+        } else if (check == false) {
+            console.log("Don't have booking id in hotel");
         }
-    })
-    index = books.findIndex(books => books.book_id == id)
-    if (check == true) {
-        books.splice(index, 1)
-        console.log("Cancel booking!");
-        console.table(books);
-        return books;
-    } else if (check == false) {
-        console.log("Don't have room in hotel");
+    } else {
+        console.log("Sorry cencel booking fail");
     }
 }
 
 //เช็คห้อง
 checkBook = (id) => {
     let check = false;
-    books.forEach((book) => {
-        if (book.book_id == id) {
-            console.log("Booking success!");
-            console.table(books);
-            check = true;
+    if (reg_id.test(id)) {
+        books.forEach((book) => {
+            if (book.book_id == id) {
+                console.log("Booking success!");
+                console.table(books);
+                check = true;
+            }
+        })
+        if (check == false) {
+            console.log("NO booking");
         }
-    })
-    if (check == false) {
-        console.log("NO booking");
+    } else {
+        console.log("Error your input id is wrong");
     }
 }
 
