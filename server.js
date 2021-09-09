@@ -5,7 +5,6 @@ const { addRoom, createCustomer, bookRoom, deleteBook, checkBook } = require('./
 
 
 
-
 http.createServer(function (req, res) {
 
     var request_path = url.parse(req.url, true);

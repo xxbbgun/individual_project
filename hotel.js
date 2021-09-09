@@ -3,22 +3,37 @@ const { rooms, Room } = require("./room")
 const { customers, Customer } = require("./customer");
 const { books, Book } = require("./book");
 
+const reg_text = /[a-zA-Z]$/;
+const reg_tel = /^[0][6789]\d{8}$/;
+const reg_number = /\w$/;
+const reg_price = /^\d{1,5}$/;
+const reg_id = /\d/;
+const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
+
+
+
 //เพิ่มห้อง
 addRoom = (room_id, number, type, price, status) => {
     let check = false;
-    rooms.forEach((room) => {
-        if (room.room_number == number) {
-            console.log("sorry we already have this room");
-            check = true;
+
+    if (reg_id.test(room_id)&&reg_number.test(number)&&reg_text.test(type)&&reg_price.test(price)&&reg_text.test(status)) {
+        rooms.forEach((room) => {
+            if (room.room_number == number) {
+                console.log("sorry we already have this room");
+                check = true;
+            }
+        })
+        if (check == false) {
+            rooms.push(new Room(room_id, number, type, price, status))
+            console.log("Create Room already!");
+            console.table(rooms);
+            return rooms;
+        } else if(check == true) {
+            console.log("Failed to create a room. This room has already been created.");
         }
-    })
-    if (check == false) {
-        rooms.push(new Room(room_id, number, type, price, status))
-        console.log("Create Room already!");
-        console.table(rooms);
-        return rooms;
+    }else{
+        console.log("error");
     }
-    console.table(rooms);
 }
 
 //ลบห้อง
@@ -86,7 +101,6 @@ bookRoom = (book_id, customer_id, room_id, date) => {
     let check = false;
     books.forEach((book) => {
         if (book.book_id == book_id || book.room_id == room_id && book.date == date) {
-            console.log("จองแล้ว");
             check = true;
         }
     })
@@ -96,7 +110,7 @@ bookRoom = (book_id, customer_id, room_id, date) => {
         console.table(books);
         return books;
     } else if (check == true) {
-        console.log("sorry");
+        console.log("Sorry this room is already booking");
     }
 }
 
@@ -146,6 +160,6 @@ module.exports = {
     deleteCustomer: deleteCustomer,
     bookRoom, bookRoom,
     deleteBook: deleteBook,
-    checkBook:checkBook
+    checkBook: checkBook
 
 }
