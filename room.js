@@ -12,11 +12,11 @@ return `${this.room_id} ${ this.room_number} ${ this.room_type} ${this.room_pric
 }
 
 var rooms = new Array();
-rooms.push(new Room(1, "001", "deluxe",5000, "occupied clean"));
-rooms.push(new Room(2, "010", "standard",2500, "occupied dirty"));
-rooms.push(new Room(3, "008", "standard", 2500,"occupied clean"));
-rooms.push(new Room(4, "015", "standard", 2500,"occupied clean"))
-rooms.push(new Room(5, "012", "standard", 2500,"occupied dirty"));
+rooms.push(new Room(1, "011", "standard",5000, "occupied clean"));
+rooms.push(new Room(2, "012", "superior",2500, "occupied dirty"));
+rooms.push(new Room(3, "013", "deluxe", 2500,"vacant clean"));
+rooms.push(new Room(4, "014", "suite", 2500,"vacant dirty"))
+rooms.push(new Room(5, "015", "cabana", 2500,"assign dirty"));
 
 
 // addRoom = (room_id,number,type ,price, status) => {

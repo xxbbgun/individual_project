@@ -10,11 +10,11 @@ Book.prototype.getRoom = function () {
 }
 
 var books = new Array();
-books.push(new Book(1, 1, "001", "2021-09-01"));
-books.push(new Book(2, 2, "010", "2021-09-02"));
-books.push(new Book(3, 3, "008", "2021-09-03"));
-books.push(new Book(4, 4, "015", "2021-09-04"))
-books.push(new Book(5, 5, "012", "2021-09-05"));
+books.push(new Book(1, 1, "011", "2021-09-01"));
+books.push(new Book(2, 2, "012", "2021-09-02"));
+books.push(new Book(3, 3, "013", "2021-09-03"));
+books.push(new Book(4, 4, "014", "2021-09-04"))
+books.push(new Book(5, 5, "015", "2021-09-05"));
 
 
 
